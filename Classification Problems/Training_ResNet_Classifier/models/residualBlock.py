@@ -3,6 +3,25 @@ import torch
 
 class ResidualBlock(nn.Module):
     def __init__(self, in_channels, intermediate_channels, expansion, is_bottle_neck, stride):
+
+        """
+        Creates a Bottleneck with conv 1x1->3x3->1x1 layers.
+
+        Note:
+          1. Addition of feature maps occur at just before the final ReLU with the input feature maps
+          2. if input size is different from output, select projected mapping or else identity mapping.
+          3. if is_Bottleneck=False (3x3->3x3) are used else (1x1->3x3->1x1). Bottleneck is required for resnet-50/101/152
+        Args:
+            in_channels (int) : input channels to the Bottleneck
+            intermediate_channels (int) : number of channels to 3x3 conv
+            expansion (int) : factor by which the input #channels are increased
+            stride (int) : stride applied in the 3x3 conv. 2 for first Bottleneck of the block and 1 for remaining
+
+        Attributes:
+            Layer consisting of conv->batchnorm->relu
+
+        """
+
         super(ResidualBlock, self).__init__()
 
         self.expansion = expansion
